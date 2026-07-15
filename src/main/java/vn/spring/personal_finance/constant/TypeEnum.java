@@ -1,6 +1,6 @@
 package vn.spring.personal_finance.constant;
 
-public enum CategoryTypeEnum {
+public enum TypeEnum {
     INCOME,
     EXPENSE
 }

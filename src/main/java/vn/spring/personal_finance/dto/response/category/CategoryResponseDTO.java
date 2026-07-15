@@ -1,10 +1,10 @@
-package vn.spring.personal_finance.dto.response;
+package vn.spring.personal_finance.dto.response.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.spring.personal_finance.constant.CategoryTypeEnum;
+import vn.spring.personal_finance.constant.TypeEnum;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +17,7 @@ public class CategoryResponseDTO {
 
     private String name;
 
-    private CategoryTypeEnum type;
+    private TypeEnum type;
 
     private LocalDateTime createdAt;
 }

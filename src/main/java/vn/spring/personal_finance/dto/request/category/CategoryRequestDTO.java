@@ -1,4 +1,4 @@
-package vn.spring.personal_finance.dto.request;
+package vn.spring.personal_finance.dto.request.category;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import vn.spring.personal_finance.constant.CategoryTypeEnum;
+import vn.spring.personal_finance.constant.TypeEnum;
 
 @Getter
 @Setter
@@ -18,5 +18,5 @@ public class CategoryRequestDTO {
     private String name;
 
     @NotNull(message = "Type is required")
-    private CategoryTypeEnum type;
+    private TypeEnum type;
 }

@@ -1,19 +1,18 @@
 package vn.spring.personal_finance.service;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import vn.spring.personal_finance.dto.request.CategoryQuery;
-import vn.spring.personal_finance.dto.request.CategoryRequestDTO;
-import vn.spring.personal_finance.dto.response.CategoryResponseDTO;
+import org.springframework.data.domain.Page;
+import vn.spring.personal_finance.dto.request.category.CategoryQuery;
+import vn.spring.personal_finance.dto.request.category.CategoryRequestDTO;
+import vn.spring.personal_finance.dto.response.category.CategoryResponseDTO;
 import vn.spring.personal_finance.dto.response.PaginationResponse;
 import vn.spring.personal_finance.entity.Category;
 
 import java.util.List;
 
 public interface CategoryService {
-    CategoryResponseDTO createCategory(CategoryRequestDTO req);
-    PaginationResponse<List<CategoryResponseDTO>> getCategories(CategoryQuery query);
-    CategoryResponseDTO getCategoryById(long id);
-    CategoryResponseDTO updateCategory(CategoryRequestDTO req, long id);
+    Category createCategory(Category category);
+    Page<Category> getCategories(CategoryQuery query);
+    Category getCategoryById(long id);
+    Category updateCategory(Category req, long id);
     void deleteCategory(long id);
 }
