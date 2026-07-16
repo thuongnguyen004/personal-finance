@@ -1,21 +1,18 @@
-//package vn.spring.personal_finance.dto.response;
-//
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//
-//import java.time.LocalDateTime;
-//
-//@Getter
-//@Setter
-//@AllArgsConstructor
-//@NoArgsConstructor
-//
-//public class ErrorResponse {
-//    private LocalDateTime timestamp;
-//    private int status;
-//    private String error;
-//    private String message;
-//
-//}
+package vn.spring.personal_finance.dto.response;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ErrorResponse {
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private String message;
+}

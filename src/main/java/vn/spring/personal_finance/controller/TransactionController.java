@@ -2,6 +2,7 @@ package vn.spring.personal_finance.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,29 +39,34 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 
-//    @GetMapping("/transactions")
-//    public ResponseEntity<PaginationResponse<List<TransactionListResponseDTO>>> getTransactions(TransactionQuery query){
-//        PaginationResponse<List<TransactionListResponseDTO>> listTransaction = this.transactionService.getTransactions(query);
-//
-//        return ResponseEntity.ok().body(listTransaction);
-//    }
-//
-//    @GetMapping("/transactions/{id}")
-//    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable("id") long id){
-//        TransactionResponseDTO transaction = this.transactionService.getTransactionById(id);
-//        return ResponseEntity.ok().body(transaction);
-//    }
-//
-//    @PutMapping("/transactions/{id}")
-//    public ResponseEntity<TransactionResponseDTO> updateTransaction(@RequestBody TransactionRequestDTO req, @PathVariable("id") long id){
-//        TransactionResponseDTO transaction = this.transactionService.updateTransaction(req,id);
-//
-//        return ResponseEntity.ok().body(transaction);
-//    }
-//
-//    @DeleteMapping("/transactions/{id}")
-//    public ResponseEntity<Void> deleteTransaction(@PathVariable("id") long id){
-//        this.transactionService.deleteTransaction(id);
-//        return ResponseEntity.ok().body(null);
-//    }
+    @GetMapping("/transactions")
+    public ResponseEntity<PaginationResponse<List<TransactionListResponseDTO>>> getTransactions(TransactionQuery query){
+        Page<Transaction> transactionPage = this.transactionService.getTransactions(query);
+        Page<TransactionListResponseDTO> transactionResponse = transactionPage.map(this.transactionListResponseBuilder::buildList);
+        PaginationResponse<List<TransactionListResponseDTO>> listTransaction = PaginationResponse.setPaginate(transactionResponse);
+
+        return ResponseEntity.ok().body(listTransaction);
+    }
+
+    @GetMapping("/transactions/{id}")
+    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable("id") long id){
+        Transaction transaction =  this.transactionService.getTransactionById(id);
+        TransactionResponseDTO transactionResponse = transactionResponseBuilder.build(transaction);
+        return ResponseEntity.ok().body(transactionResponse);
+    }
+
+    @PutMapping("/transactions/{id}")
+    public ResponseEntity<TransactionResponseDTO> updateTransaction(@RequestBody TransactionRequestDTO transactionRequest, @PathVariable("id") long id){
+        Transaction transaction = this.transactionBuilder.build(transactionRequest);
+        Transaction updatedTransaction = this.transactionService.updateTransaction(transaction,id);
+        TransactionResponseDTO transactionResponse = this.transactionResponseBuilder.build(updatedTransaction);
+
+        return ResponseEntity.ok().body(transactionResponse);
+    }
+
+    @DeleteMapping("/transactions/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable("id") long id){
+        this.transactionService.deleteTransaction(id);
+        return ResponseEntity.ok().body(null);
+    }
 }

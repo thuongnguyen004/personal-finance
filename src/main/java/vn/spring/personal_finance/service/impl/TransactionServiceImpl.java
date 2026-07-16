@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import vn.spring.personal_finance.builders.transaction.TransactionResponseBuilder;
+import vn.spring.personal_finance.builders.transaction.TransactionUpdateBuilder;
 import vn.spring.personal_finance.dto.request.transaction.TransactionQuery;
 import vn.spring.personal_finance.dto.request.transaction.TransactionRequestDTO;
 import vn.spring.personal_finance.dto.response.PaginationResponse;
@@ -16,6 +18,7 @@ import vn.spring.personal_finance.dto.response.transaction.TransactionResponseDT
 import vn.spring.personal_finance.entity.Category;
 import vn.spring.personal_finance.entity.Transaction;
 import vn.spring.personal_finance.builders.transaction.TransactionBuilder;
+import vn.spring.personal_finance.exception.ResourceNotFoundException;
 import vn.spring.personal_finance.repository.CategoryRepository;
 import vn.spring.personal_finance.repository.TransactionRepository;
 import vn.spring.personal_finance.service.TransactionService;
@@ -28,51 +31,48 @@ import java.util.List;
 public class TransactionServiceImpl implements TransactionService {
     private final CategoryRepository categoryRepository;
     private final TransactionRepository transactionRepository;
-    private final TransactionBuilder transactionBuilder;
+    private final TransactionUpdateBuilder transactionUpdateBuilder;
 
     public Transaction createTransaction(Transaction transaction){
         Category category = this.categoryRepository.findById(transaction.getCategory().getId()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+                new ResourceNotFoundException("Category not found"));
 
         transaction.setCategory(category);
 
         return this.transactionRepository.save(transaction);
     }
 
-//    public PaginationResponse<List<TransactionListResponseDTO>> getTransactions(TransactionQuery query){
-//        Specification<Transaction> spec = TransactionSpecification.getSpecification(query);
-//        Pageable pageable = PageRequest.of(query.getPage() -1, query.getSize());
-//
-//        Page<Transaction> transactionPage = this.transactionRepository.findAll(spec,pageable);
-//        Page<TransactionListResponseDTO> dtoPage = transactionPage.map(this.transactionBuilder::toListResponse);
-//
-//        return PaginationResponse.setPaginate(dtoPage);
-//    }
-//
-//    public TransactionResponseDTO getTransactionById(long id){
-//        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
-//                new ResponseStatusException(HttpStatus.NOT_FOUND,"transaction not found"));
-//        return this.transactionBuilder.toResponse(transaction);
-//    }
-//
-//    public TransactionResponseDTO updateTransaction(TransactionRequestDTO req, long id){
-//        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
-//                new ResponseStatusException(HttpStatus.NOT_FOUND,"transaction not found"));
-//
-//        Category category = this.categoryRepository.findById(req.getCategory_id()).orElseThrow(() ->
-//                new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
-//
-//        this.transactionBuilder.updateEntity(transaction,req);
-//        transaction.setCategory(category);
-//
-//        this.transactionRepository.save(transaction);
-//
-//        return this.transactionBuilder.toResponse(transaction);
-//    }
-//    public void deleteTransaction(long id){
-//        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
-//                new ResponseStatusException(HttpStatus.NOT_FOUND,"transaction not found"));
-//        this.transactionRepository.deleteById(id);
-//
-//    }
+    public Page<Transaction> getTransactions(TransactionQuery query){
+        Specification<Transaction> spec = TransactionSpecification.getSpecification(query);
+        Pageable pageable = PageRequest.of(query.getPage() -1, query.getSize());
+
+        return this.transactionRepository.findAll(spec,pageable);
+    }
+
+    public Transaction getTransactionById(long id){
+        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Transaction not found"));
+        return transaction;
+    }
+
+    public Transaction updateTransaction(Transaction transaction, long id){
+        Transaction currentTransaction = this.transactionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Transaction not found"));
+
+        Category category = this.categoryRepository.findById(transaction.getCategory().getId()).orElseThrow(() ->
+                new ResourceNotFoundException("Category not found"));
+
+        this.transactionUpdateBuilder.buildUpdate(currentTransaction, transaction);
+        currentTransaction.setCategory(category);
+
+        this.transactionRepository.save(currentTransaction);
+
+        return currentTransaction;
+    }
+    public void deleteTransaction(long id){
+        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Transaction not found"));
+        this.transactionRepository.deleteById(id);
+
+    }
 }

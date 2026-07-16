@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import vn.spring.personal_finance.builders.category.CategoryUpdateBuilder;
 import vn.spring.personal_finance.dto.request.category.CategoryQuery;
 import vn.spring.personal_finance.entity.Category;
+import vn.spring.personal_finance.exception.ResourceConflictException;
 import vn.spring.personal_finance.exception.ResourceNotFoundException;
 import vn.spring.personal_finance.repository.CategoryRepository;
 import vn.spring.personal_finance.service.CategoryService;
@@ -24,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public Category createCategory(Category category){
         if (this.categoryRepository.existsByName(category.getName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Category already exists");
+            throw new ResourceConflictException("Category already exists");
         }
         return this.categoryRepository.save(category);
     }
@@ -37,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category getCategoryById(long id){
-        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         return category ;
     }
 
