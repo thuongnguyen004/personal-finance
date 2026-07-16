@@ -1,16 +1,16 @@
 package vn.spring.personal_finance.builders.category;
 
 import org.springframework.stereotype.Component;
-import vn.spring.personal_finance.dto.request.category.CategoryRequestDTO;
+import vn.spring.personal_finance.dto.request.category.CategoryRequest;
 import vn.spring.personal_finance.entity.Category;
 
 @Component
 public class CategoryBuilder {
 
-    public Category build(CategoryRequestDTO categoryRequestDTO) {
+    public Category build(CategoryRequest categoryRequest) {
         return Category.builder()
-                .name(categoryRequestDTO.getName())
-                .type(categoryRequestDTO.getType())
+                .name(categoryRequest.getName())
+                .type(categoryRequest.getType())
                 .build();
     }
 }

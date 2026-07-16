@@ -8,23 +8,22 @@ import vn.spring.personal_finance.constant.TypeEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionListResponseDTO {
+public class TransactionListResponse {
     private long id;
 
     private BigDecimal amount;
 
     private TypeEnum type;
 
-    private LocalDate transaction_date;
+    private LocalDate transactionDate;
 
-    private long category_id;
+    private long categoryId;
 
-    private String category_name;
+    private String categoryName;
 
 }

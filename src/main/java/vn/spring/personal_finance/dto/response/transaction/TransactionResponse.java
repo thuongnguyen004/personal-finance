@@ -1,13 +1,10 @@
 package vn.spring.personal_finance.dto.response.transaction;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.spring.personal_finance.constant.TypeEnum;
-import vn.spring.personal_finance.entity.Category;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionResponseDTO {
+public class TransactionResponse {
     private long id;
 
     private BigDecimal amount;
@@ -26,11 +23,11 @@ public class TransactionResponseDTO {
 
     private String description;
 
-    private LocalDate transaction_date;
+    private LocalDate transactionDate;
 
-    private long category_id;
+    private long categoryId;
 
-    private String category_name;
+    private String categoryName;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

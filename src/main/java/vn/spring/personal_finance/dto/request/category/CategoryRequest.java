@@ -12,7 +12,7 @@ import vn.spring.personal_finance.constant.TypeEnum;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryRequestDTO {
+public class CategoryRequest {
 
     @NotBlank(message = "Name is required")
     private String name;

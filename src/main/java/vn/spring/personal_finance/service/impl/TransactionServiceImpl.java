@@ -5,26 +5,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import vn.spring.personal_finance.builders.transaction.TransactionResponseBuilder;
 import vn.spring.personal_finance.builders.transaction.TransactionUpdateBuilder;
 import vn.spring.personal_finance.dto.request.transaction.TransactionQuery;
-import vn.spring.personal_finance.dto.request.transaction.TransactionRequestDTO;
-import vn.spring.personal_finance.dto.response.PaginationResponse;
-import vn.spring.personal_finance.dto.response.transaction.TransactionListResponseDTO;
-import vn.spring.personal_finance.dto.response.transaction.TransactionResponseDTO;
 import vn.spring.personal_finance.entity.Category;
 import vn.spring.personal_finance.entity.Transaction;
-import vn.spring.personal_finance.builders.transaction.TransactionBuilder;
 import vn.spring.personal_finance.exception.ResourceNotFoundException;
 import vn.spring.personal_finance.repository.CategoryRepository;
 import vn.spring.personal_finance.repository.TransactionRepository;
 import vn.spring.personal_finance.service.TransactionService;
 import vn.spring.personal_finance.specification.TransactionSpecification;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Service

@@ -2,12 +2,7 @@ package vn.spring.personal_finance.service;
 
 import org.springframework.data.domain.Page;
 import vn.spring.personal_finance.dto.request.category.CategoryQuery;
-import vn.spring.personal_finance.dto.request.category.CategoryRequestDTO;
-import vn.spring.personal_finance.dto.response.category.CategoryResponseDTO;
-import vn.spring.personal_finance.dto.response.PaginationResponse;
 import vn.spring.personal_finance.entity.Category;
-
-import java.util.List;
 
 public interface CategoryService {
     Category createCategory(Category category);

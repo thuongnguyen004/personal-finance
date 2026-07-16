@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import vn.spring.personal_finance.builders.transaction.TransactionBuilder;
 import vn.spring.personal_finance.builders.transaction.TransactionListResponseBuilder;
 import vn.spring.personal_finance.builders.transaction.TransactionResponseBuilder;
-import vn.spring.personal_finance.builders.transaction.TransactionUpdateBuilder;
 import vn.spring.personal_finance.dto.request.transaction.TransactionQuery;
-import vn.spring.personal_finance.dto.request.transaction.TransactionRequestDTO;
+import vn.spring.personal_finance.dto.request.transaction.TransactionRequest;
 import vn.spring.personal_finance.dto.response.PaginationResponse;
-import vn.spring.personal_finance.dto.response.transaction.TransactionListResponseDTO;
-import vn.spring.personal_finance.dto.response.transaction.TransactionResponseDTO;
+import vn.spring.personal_finance.dto.response.transaction.TransactionListResponse;
+import vn.spring.personal_finance.dto.response.transaction.TransactionResponse;
 import vn.spring.personal_finance.entity.Transaction;
 import vn.spring.personal_finance.service.TransactionService;
 
@@ -30,36 +29,36 @@ public class TransactionController {
     private final TransactionListResponseBuilder transactionListResponseBuilder;
 
     @PostMapping("/transactions")
-    public ResponseEntity<TransactionResponseDTO> createTransaction(@Valid @RequestBody TransactionRequestDTO request){
-        Transaction transaction = this.transactionBuilder.build(request);
+    public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody TransactionRequest transactionRequest){
+        Transaction transaction = this.transactionBuilder.build(transactionRequest);
         Transaction newTransaction = this.transactionService.createTransaction(transaction);
 
-        TransactionResponseDTO transactionResponse = this.transactionResponseBuilder.build(newTransaction);
+        TransactionResponse transactionResponse = this.transactionResponseBuilder.build(newTransaction);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<PaginationResponse<List<TransactionListResponseDTO>>> getTransactions(TransactionQuery query){
-        Page<Transaction> transactionPage = this.transactionService.getTransactions(query);
-        Page<TransactionListResponseDTO> transactionResponse = transactionPage.map(this.transactionListResponseBuilder::buildList);
-        PaginationResponse<List<TransactionListResponseDTO>> listTransaction = PaginationResponse.setPaginate(transactionResponse);
+    public ResponseEntity<PaginationResponse<List<TransactionListResponse>>> getTransactions(TransactionQuery transactionQuery){
+        Page<Transaction> transactionPage = this.transactionService.getTransactions(transactionQuery);
+        Page<TransactionListResponse> transactionResponse = transactionPage.map(this.transactionListResponseBuilder::buildList);
+        PaginationResponse<List<TransactionListResponse>> listTransaction = PaginationResponse.setPaginate(transactionResponse);
 
         return ResponseEntity.ok().body(listTransaction);
     }
 
     @GetMapping("/transactions/{id}")
-    public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable("id") long id){
+    public ResponseEntity<TransactionResponse> getTransactionById(@PathVariable("id") long id){
         Transaction transaction =  this.transactionService.getTransactionById(id);
-        TransactionResponseDTO transactionResponse = transactionResponseBuilder.build(transaction);
+        TransactionResponse transactionResponse = transactionResponseBuilder.build(transaction);
         return ResponseEntity.ok().body(transactionResponse);
     }
 
     @PutMapping("/transactions/{id}")
-    public ResponseEntity<TransactionResponseDTO> updateTransaction(@RequestBody TransactionRequestDTO transactionRequest, @PathVariable("id") long id){
+    public ResponseEntity<TransactionResponse> updateTransaction(@RequestBody TransactionRequest transactionRequest, @PathVariable("id") long id){
         Transaction transaction = this.transactionBuilder.build(transactionRequest);
         Transaction updatedTransaction = this.transactionService.updateTransaction(transaction,id);
-        TransactionResponseDTO transactionResponse = this.transactionResponseBuilder.build(updatedTransaction);
+        TransactionResponse transactionResponse = this.transactionResponseBuilder.build(updatedTransaction);
 
         return ResponseEntity.ok().body(transactionResponse);
     }

@@ -18,7 +18,7 @@ public class PaginationResponse<T> {
         private int page;
         private int size;
         private long total;
-        private int total_pages;
+        private int totalPages;
     }
     public static <T> PaginationResponse<List<T>> setPaginate(Page<T> page) {
 
@@ -28,7 +28,7 @@ public class PaginationResponse<T> {
         p.setPage(page.getNumber() +1);
         p.setSize(page.getSize());
         p.setTotal(page.getTotalElements());
-        p.setTotal_pages(page.getTotalPages());
+        p.setTotalPages(page.getTotalPages());
 
         response.setPagination(p);
         response.setMeta(page.getContent());
