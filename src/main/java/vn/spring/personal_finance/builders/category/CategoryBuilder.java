@@ -8,9 +8,7 @@ import vn.spring.personal_finance.entity.Category;
 public class CategoryBuilder {
 
     public Category build(CategoryRequest categoryRequest) {
-        return Category.builder()
-                .name(categoryRequest.getName())
-                .type(categoryRequest.getType())
-                .build();
+        return new Category(categoryRequest.getName(),
+                   categoryRequest.getType());
     }
 }

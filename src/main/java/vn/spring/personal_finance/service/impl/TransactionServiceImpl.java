@@ -21,7 +21,6 @@ import vn.spring.personal_finance.specification.TransactionSpecification;
 public class TransactionServiceImpl implements TransactionService {
     private final CategoryRepository categoryRepository;
     private final TransactionRepository transactionRepository;
-    private final TransactionUpdateBuilder transactionUpdateBuilder;
 
     public Transaction createTransaction(Transaction transaction){
         Category category = this.categoryRepository.findById(transaction.getCategory().getId()).orElseThrow(() ->
@@ -40,19 +39,19 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public Transaction getTransactionById(long id){
-        Transaction transaction = this.transactionRepository.findById(id).orElseThrow(() ->
+        return this.transactionRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Transaction not found"));
-        return transaction;
     }
 
     public Transaction updateTransaction(Transaction transaction, long id){
+        TransactionUpdateBuilder transactionUpdateBuilder = new TransactionUpdateBuilder();
         Transaction currentTransaction = this.transactionRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Transaction not found"));
 
         Category category = this.categoryRepository.findById(transaction.getCategory().getId()).orElseThrow(() ->
                 new ResourceNotFoundException("Category not found"));
 
-        this.transactionUpdateBuilder.buildUpdate(currentTransaction, transaction);
+        transactionUpdateBuilder.buildUpdate(currentTransaction, transaction);
         currentTransaction.setCategory(category);
 
         this.transactionRepository.save(currentTransaction);

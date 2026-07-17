@@ -20,7 +20,7 @@ import vn.spring.personal_finance.specification.CategorySpecification;
 @Service
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    private final CategoryUpdateBuilder categoryUpdateBuilder;
+
     private final CategoryRepository categoryRepository;
 
     public Category createCategory(Category category){
@@ -38,13 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category getCategoryById(long id){
-        Category category = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-        return category ;
+        return this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     public Category updateCategory(Category category, long id){
+        CategoryUpdateBuilder categoryUpdateBuilder =new CategoryUpdateBuilder();
         Category currentCategory = this.categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-            this.categoryUpdateBuilder.build(currentCategory,category);
+            categoryUpdateBuilder.build(currentCategory,category);
             this.categoryRepository.save(currentCategory);
         return currentCategory;
     }

@@ -31,4 +31,22 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
+
+    public Category(String name, TypeEnum type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    public Category(long id, String name, TypeEnum type) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    public Category(long id, String name, TypeEnum type, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.createdAt = createdAt;
+    }
 }

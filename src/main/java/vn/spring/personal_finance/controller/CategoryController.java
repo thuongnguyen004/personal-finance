@@ -24,21 +24,23 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final CategoryBuilder categoryBuilder;
-    private final CategoryResponseBuilder categoryResponseBuilder;
-    private final CategoryUpdateBuilder categoryUpdateBuilder;
 
     @PostMapping("/categories")
     public ResponseEntity<CategoryResponse> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
+        CategoryBuilder categoryBuilder = new CategoryBuilder();
 
+        CategoryResponseBuilder categoryResponseBuilder = new CategoryResponseBuilder();
         Category category = categoryBuilder.build(categoryRequest);
+
         Category createdCategory = this.categoryService.createCategory(category);
         CategoryResponse responseDTO = categoryResponseBuilder.build(createdCategory);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     @GetMapping("/categories")
     public ResponseEntity<PaginationResponse<List<CategoryResponse>>> getCategories(CategoryQuery categoryQuery){
+        CategoryResponseBuilder categoryResponseBuilder = new CategoryResponseBuilder();
 
         Page<Category> categoryPage = this.categoryService.getCategories(categoryQuery);
         Page<CategoryResponse> categoryResponse = categoryPage.map(categoryResponseBuilder::build);
@@ -48,16 +50,20 @@ public class CategoryController {
     }
     @GetMapping("/categories/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("id") long id){
+        CategoryResponseBuilder categoryResponseBuilder = new CategoryResponseBuilder();
 
         Category category = this.categoryService.getCategoryById(id);
-        CategoryResponse response = this.categoryResponseBuilder.build(category);
+        CategoryResponse response = categoryResponseBuilder.build(category);
         return ResponseEntity.ok().body(response);
     }
     @PutMapping("/categories/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("id") long id, @RequestBody CategoryRequest categoryRequest){
-        Category category = this.categoryBuilder.build(categoryRequest);
+        CategoryBuilder categoryBuilder = new CategoryBuilder();
+        CategoryResponseBuilder categoryResponseBuilder = new CategoryResponseBuilder();
+
+        Category category = categoryBuilder.build(categoryRequest);
         Category updatedCategory  = this.categoryService.updateCategory(category, id);
-        CategoryResponse categoryResponse = this.categoryResponseBuilder.build(updatedCategory);
+        CategoryResponse categoryResponse = categoryResponseBuilder.build(updatedCategory);
         return ResponseEntity.ok().body(categoryResponse);
     }
 

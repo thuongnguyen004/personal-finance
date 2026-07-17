@@ -14,7 +14,9 @@ import vn.spring.personal_finance.dto.request.transaction.TransactionRequest;
 import vn.spring.personal_finance.dto.response.PaginationResponse;
 import vn.spring.personal_finance.dto.response.transaction.TransactionListResponse;
 import vn.spring.personal_finance.dto.response.transaction.TransactionResponse;
+import vn.spring.personal_finance.entity.Category;
 import vn.spring.personal_finance.entity.Transaction;
+import vn.spring.personal_finance.service.CategoryService;
 import vn.spring.personal_finance.service.TransactionService;
 
 import java.util.List;
@@ -24,24 +26,27 @@ import java.util.List;
 @RequestMapping("/api")
 public class TransactionController {
     private final TransactionService transactionService;
-    private final TransactionBuilder transactionBuilder;
-    private final TransactionResponseBuilder transactionResponseBuilder;
-    private final TransactionListResponseBuilder transactionListResponseBuilder;
+    private final CategoryService categoryService;
 
     @PostMapping("/transactions")
     public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody TransactionRequest transactionRequest){
-        Transaction transaction = this.transactionBuilder.build(transactionRequest);
-        Transaction newTransaction = this.transactionService.createTransaction(transaction);
+        TransactionBuilder transactionBuilder = new TransactionBuilder();
+        TransactionResponseBuilder transactionResponseBuilder = new TransactionResponseBuilder();
 
-        TransactionResponse transactionResponse = this.transactionResponseBuilder.build(newTransaction);
+        Category correspondingCategory = categoryService.getCategoryById(transactionRequest.getCategoryId());
+        Transaction transaction = transactionBuilder.build(transactionRequest, correspondingCategory);
+
+        Transaction newTransaction = this.transactionService.createTransaction(transaction);
+        TransactionResponse transactionResponse = transactionResponseBuilder.build(newTransaction);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(transactionResponse);
     }
 
     @GetMapping("/transactions")
     public ResponseEntity<PaginationResponse<List<TransactionListResponse>>> getTransactions(TransactionQuery transactionQuery){
+        TransactionListResponseBuilder transactionListResponseBuilder = new TransactionListResponseBuilder();
         Page<Transaction> transactionPage = this.transactionService.getTransactions(transactionQuery);
-        Page<TransactionListResponse> transactionResponse = transactionPage.map(this.transactionListResponseBuilder::buildList);
+        Page<TransactionListResponse> transactionResponse = transactionPage.map(transactionListResponseBuilder::buildList);
         PaginationResponse<List<TransactionListResponse>> listTransaction = PaginationResponse.setPaginate(transactionResponse);
 
         return ResponseEntity.ok().body(listTransaction);
@@ -49,6 +54,7 @@ public class TransactionController {
 
     @GetMapping("/transactions/{id}")
     public ResponseEntity<TransactionResponse> getTransactionById(@PathVariable("id") long id){
+        TransactionResponseBuilder transactionResponseBuilder = new TransactionResponseBuilder();
         Transaction transaction =  this.transactionService.getTransactionById(id);
         TransactionResponse transactionResponse = transactionResponseBuilder.build(transaction);
         return ResponseEntity.ok().body(transactionResponse);
@@ -56,9 +62,13 @@ public class TransactionController {
 
     @PutMapping("/transactions/{id}")
     public ResponseEntity<TransactionResponse> updateTransaction(@RequestBody TransactionRequest transactionRequest, @PathVariable("id") long id){
-        Transaction transaction = this.transactionBuilder.build(transactionRequest);
+        TransactionBuilder transactionBuilder = new TransactionBuilder();
+        TransactionResponseBuilder transactionResponseBuilder = new TransactionResponseBuilder();
+        Category correspondingCategory = categoryService.getCategoryById(transactionRequest.getCategoryId());
+
+        Transaction transaction = transactionBuilder.build(transactionRequest,correspondingCategory);
         Transaction updatedTransaction = this.transactionService.updateTransaction(transaction,id);
-        TransactionResponse transactionResponse = this.transactionResponseBuilder.build(updatedTransaction);
+        TransactionResponse transactionResponse = transactionResponseBuilder.build(updatedTransaction);
 
         return ResponseEntity.ok().body(transactionResponse);
     }

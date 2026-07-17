@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "transactions")
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
@@ -42,4 +41,13 @@ public class Transaction {
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = false)
     private LocalDateTime updatedAt;
+
+    public Transaction(BigDecimal amount, TypeEnum type, String description, LocalDate transactionDate, Category category) {
+        this.amount = amount;
+        this.type = type;
+        this.description = description;
+        this.transactionDate = transactionDate;
+        this.category = category;
+    }
+
 }

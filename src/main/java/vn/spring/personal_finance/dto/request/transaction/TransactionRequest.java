@@ -31,4 +31,12 @@ public class TransactionRequest {
 
     @NotNull(message = "Category_id is required")
     private long categoryId;
+
+    public TransactionRequest(BigDecimal amount, long categoryId, String description, LocalDate transactionDate, TypeEnum type) {
+        this.amount = amount;
+        this.categoryId = categoryId;
+        this.description = description;
+        this.transactionDate = transactionDate;
+        this.type = type;
+    }
 }

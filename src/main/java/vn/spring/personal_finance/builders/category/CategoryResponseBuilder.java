@@ -8,13 +8,12 @@ import vn.spring.personal_finance.entity.Category;
 public class CategoryResponseBuilder {
 
     public CategoryResponse build(Category category) {
-        CategoryResponse categoryResponse = new CategoryResponse(
+
+        return new CategoryResponse(
                 category.getId(),
                 category.getName(),
                 category.getType(),
                 category.getCreatedAt()
         );
-
-        return categoryResponse;
     }
 }

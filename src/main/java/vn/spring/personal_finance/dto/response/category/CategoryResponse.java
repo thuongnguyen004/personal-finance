@@ -1,9 +1,6 @@
 package vn.spring.personal_finance.dto.response.category;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import vn.spring.personal_finance.constant.TypeEnum;
 
 import java.time.LocalDateTime;
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CategoryResponse {
     private long id;
 
